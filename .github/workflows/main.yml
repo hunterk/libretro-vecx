@@ -1,0 +1,120 @@
+name: VecX libretro
+
+on:
+  push
+  watch: # this is a hack that lets repo owners trigger a build by starring
+    types: [started]
+    if: github.actor == github.event.repository.owner.login
+
+jobs:
+  linux_aarch64:
+    name: Build for Linux aarch64
+    runs-on: ubuntu-latest
+    steps:
+    - name: add foreign arch
+      run: |
+        sudo dpkg --add-architecture arm64
+        sudo rm -rf /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-backports main restricted universe multiverse"  | sudo tee -a /etc/apt/sources.list
+    - name: Install needed packages
+      run: sudo apt update && sudo apt install wget:amd64 git:amd64 build-essential:amd64 gcc:amd64 make:amd64 g++-aarch64-linux-gnu:amd64 gcc-aarch64-linux-gnu:amd64 binutils-aarch64-linux-gnu:amd64 libx11-dev:arm64 libxext-dev:arm64
+    - name: Build it
+      run: |
+        make -f Makefile.libretro -j8 CC=/usr/bin/aarch64-linux-gnu-gcc CXX=/usr/bin/aarch64-linux-gnu-g++
+        wget https://raw.githubusercontent.com/libretro/libretro-super/master/retrolink.sh && chmod +x retrolink.sh && ./retrolink.sh vecx_libretro.so
+        zip -9 ../vecx_libretro-linux_aarch64.zip vecx_libretro.so
+    - name: Create new release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: Latest
+        file: vecx_libretro-linux_aarch64.zip
+        overwrite: true
+        
+  linux_armhf:
+    name: Build for Linux armhf
+    runs-on: ubuntu-latest
+    steps:
+    - name: add foreign arch
+      run: |
+        sudo dpkg --add-architecture armhf
+        sudo rm -rf /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal-updates main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal-updates universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal-updates multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal-backports main restricted universe multiverse"  | sudo tee -a /etc/apt/sources.list
+    - name: Install needed packages
+      run: sudo apt update && sudo apt install wget:amd64 git:amd64 build-essential:amd64 gcc:amd64 make:amd64 g++-arm-linux-gnueabihf:amd64 gcc-arm-linux-gnueabihf:amd64 binutils-aarch64-linux-gnu:amd64 libx11-dev:armhf libxext-dev:armhf
+    - name: build it
+      run: |
+        make -f Makefile.libretro -j8 compiler=/usr/bin/arm-linux-gnueabihf-g++
+        wget https://raw.githubusercontent.com/libretro/libretro-super/master/retrolink.sh && chmod +x retrolink.sh && ./retrolink.sh vecx_libretro.so
+        zip -9 vecx_libretro-linux_armhf.zip vecx_libretro.so
+    - name: Create new release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: Latest
+        file: vecx_libretro-linux_armhf.zip
+        overwrite: true
+        
+  Linux_64-bit:
+    name: Build for Linux 64-bit x86
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install needed packages
+      run: sudo apt install wget git build-essential libgl1-mesa-dev
+    - name: Build it
+      run: |
+        make -f Makefile.libretro -j8
+        wget https://raw.githubusercontent.com/libretro/libretro-super/master/retrolink.sh && chmod +x retrolink.sh && ./retrolink.sh vecx_libretro.so
+        zip -9 ../vecx_libretro-linux_x86_64.zip vecx_libretro.so
+    - name: Create new release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: Latest
+        file: vecx_libretro-linux_x86_64.zip
+        overwrite: true
+        
+  Windows:
+    name: Build for Windows 64-bit via cross-compile
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install needed packages
+      run: sudo apt install wget git build-essential mingw-w64 mingw-w64-x86-64-dev mingw-w64-tools
+    - name: Build it
+      run: |
+        make -f Makefile.libretro CC=/usr/bin/x86_64-w64-mingw32-gcc CXX=/usr/bin/x86_64-w64-mingw32-g++ platform=win -j8
+        strip -s vecx_libretro.dll
+        zip -9 ../vecx_libretro-win64.zip vecx_libretro.dll
+    - name: Create new release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        tag: Windows_64-bit
+        file: vecx_libretro-win64.zip
+        overwrite: true
