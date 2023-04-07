@@ -13,24 +13,26 @@ jobs:
     name: Build for Linux aarch64
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: add foreign arch
       run: |
         sudo dpkg --add-architecture arm64
         sudo rm -rf /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal main restricted" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates main restricted" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal universe" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates universe" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal multiverse" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates multiverse" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal main restricted" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main restricted" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal universe" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates universe" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal multiverse" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates multiverse" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports focal-backports main restricted universe multiverse"  | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy-updates main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy-updates universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy-updates multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy-updates universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy-updates multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse"  | sudo tee -a /etc/apt/sources.list
     - name: Install needed packages
       run: sudo apt update && sudo apt install wget:amd64 git:amd64 build-essential:amd64 gcc:amd64 make:amd64 g++-aarch64-linux-gnu:amd64 gcc-aarch64-linux-gnu:amd64 binutils-aarch64-linux-gnu:amd64 libx11-dev:arm64 libxext-dev:arm64
     - name: Build it
@@ -50,24 +52,26 @@ jobs:
     name: Build for Linux armhf
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: add foreign arch
       run: |
         sudo dpkg --add-architecture armhf
         sudo rm -rf /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal main restricted" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates main restricted" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal universe" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates universe" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal multiverse" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-updates multiverse" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu focal-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal main restricted" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal-updates main restricted" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal universe" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal-updates universe" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal multiverse" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal-updates multiverse" | sudo tee -a /etc/apt/sources.list
-        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports focal-backports main restricted universe multiverse"  | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy-updates main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy-updates universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy-updates multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=amd64] http://us.archive.ubuntu.com/ubuntu jammy-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-updates main restricted" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-updates universe" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-updates multiverse" | sudo tee -a /etc/apt/sources.list
+        echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports jammy-backports main restricted universe multiverse"  | sudo tee -a /etc/apt/sources.list
     - name: Install needed packages
       run: sudo apt update && sudo apt install wget:amd64 git:amd64 build-essential:amd64 gcc:amd64 make:amd64 g++-arm-linux-gnueabihf:amd64 gcc-arm-linux-gnueabihf:amd64 binutils-aarch64-linux-gnu:amd64 libx11-dev:armhf libxext-dev:armhf
     - name: build it
@@ -89,6 +93,8 @@ jobs:
     steps:
     - name: Install needed packages
       run: sudo apt install wget git build-essential libgl1-mesa-dev
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Build it
       run: |
         make -f Makefile.libretro -j8
@@ -108,6 +114,8 @@ jobs:
     steps:
     - name: Install needed packages
       run: sudo apt install wget git build-essential mingw-w64 mingw-w64-x86-64-dev mingw-w64-tools
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Build it
       run: |
         make -f Makefile.libretro CC=/usr/bin/x86_64-w64-mingw32-gcc CXX=/usr/bin/x86_64-w64-mingw32-g++ platform=win -j8
