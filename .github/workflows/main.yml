@@ -125,6 +125,6 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        tag: Windows_64-bit
+        tag: Latest
         file: vecx_libretro-win64.zip
         overwrite: true
